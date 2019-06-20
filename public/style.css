@@ -25,14 +25,12 @@ a {
 .world-map {
   filter: invert(70%) sepia(0%) saturate(68%) hue-rotate(179deg) brightness(115%) contrast(119%);
   transform: translate(160px, 10px);
+  display: block;
+  position: absolute;
 }
 
-path:hover, circle:hover{
-  stroke: #002868 !important;
-  stroke-width:2px;
-  stroke-linejoin: round;
-  fill: #002868 !important;
-  cursor: pointer;
+path:hover {
+  filter: invert(80%) sepia(17%) saturate(7490%) hue-rotate(71deg) brightness(91%) contrast(83%);
 }
 
 a {
