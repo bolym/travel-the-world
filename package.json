@@ -1,0 +1,22 @@
+{
+  "name": "travel-the-world",
+  "version": "1.0.0",
+  "description": "Simple Node.js-based file server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bolym/travel-the-world.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bolym/travel-the-world/issues"
+  },
+  "homepage": "https://github.com/bolym/travel-the-world#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
