@@ -23,6 +23,9 @@ a {
   transform: translate(160px, 10px);
   display: block;
   position: absolute;
+  float: left;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 #world-map {
