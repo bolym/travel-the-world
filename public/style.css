@@ -18,8 +18,11 @@ a {
   color: #fff;
 }
 
-.usa-map {
+#us-map {
   filter: invert(70%) sepia(0%) saturate(68%) hue-rotate(179deg) brightness(115%) contrast(119%);
+  transform: translate(160px, 10px);
+  display: block;
+  position: absolute;
 }
 
 #world-map {

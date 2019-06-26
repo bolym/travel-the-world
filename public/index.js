@@ -12,3 +12,9 @@ $(document).mousemove(function(e) {
   $('#info-box').css('top',e.pageY-$('#info-box').height()-30);
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
+
+document.getElementById("US").addEventListener("click", openUS);
+
+function openUS() {
+  window.location.assign("/US.html");
+}
