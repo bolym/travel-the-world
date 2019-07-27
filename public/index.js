@@ -19,6 +19,8 @@ allCountries.forEach(function(i) {
   if(visited.includes(i.getAttribute("id"))){
     if(i.getAttribute("id") === "US"){
       i.addEventListener("click", openUS);
+    } else {
+      i.addEventListener("click", handleVisited);
     }
     console.log("we've visited here!");
   } else {
@@ -28,8 +30,6 @@ allCountries.forEach(function(i) {
 })
 
 document.getElementById("US").addEventListener("click", openUS);
-document.getElementById("CA").addEventListener("click", openCanada);
-document.getElementById("CU").addEventListener("click", openCuba);
 
 function openUS() {
   window.location.assign("/US.html");
@@ -39,13 +39,20 @@ function handleNotVisited() {
   alert("We haven't visited here yet, silly Raimy!");
 }
 
-function openCanada() {
+function handleVisited() {
+  var id = this.getAttribute("id");
+  console.log("The coutry visited that was clicked is: ", id);
+  var videoLocation = this.getAttribute("title");
+  var videoFile = "CaliforniaVideo.mp4";
+
   var videoContext = {
     location: videoLocation,
     file: videoFile
   };
 
   var videoHTML = Handlebars.templates.video(videoContext);
+
+  console.log(videoHTML);
 
   //render a page with videoHTML
 
