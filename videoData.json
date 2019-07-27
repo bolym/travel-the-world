@@ -1,0 +1,22 @@
+[
+  {
+    "location": "Washington",
+    "file": "WashingtonVideo.mp4"
+  },
+  {
+    "location": "Oregon",
+    "file": "OregonVideo.mp4"
+  },
+  {
+    "location": "California",
+    "file": "CaliforniaVideo.mp4"
+  },
+  {
+    "location": "Canada",
+    "file": "CanadaVideo.mp4"
+  },
+  {
+    "location": "Cuba",
+    "file": "CubaVideo.mp4"
+  }
+]

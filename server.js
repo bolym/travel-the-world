@@ -11,6 +11,8 @@ app.get('/', function (req, res, next){
 
 });
 
+//catch here
+
 app.use(express.static('public'));
 
 app.get('*', function (req, res) {

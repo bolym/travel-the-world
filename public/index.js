@@ -22,8 +22,15 @@ function openUS() {
 }
 
 function openCanada() {
-  //window.location.assign("/Canada.html");
-  alert("Canada clicked");
+  var videoContext = {
+    location: videoLocation,
+    file: videoFile
+  };
+
+  var videoHTML = Handlebars.templates.video(videoContext);
+
+  //render a page with videoHTML
+  
 }
 
 function openCuba() {
