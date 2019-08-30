@@ -1,6 +1,7 @@
 var path = require('path');
 var express = require('express');
 var exphbs = require('express-handlebars');
+var bodyParser = require('body-parser');
 require('dotenv/config');
 
 var app = express();
@@ -16,6 +17,8 @@ var port = process.env.PORT || 3003;
 // var mongoUser = process.env.MONGO_USER;
 // var mongoPassword = process.env.MONGO_PASSWORD;
 // var mongoDBName = process.env.MONGO_DB_NAME
+
+app.use(bodyParser.json());
 
 app.get('/', function (req, res, next){
 
@@ -37,16 +40,29 @@ app.get('/visited/:title', function(req, res, next){
   client.connect(err => {
 
     const collection = client.db("videos").collection("video_data");
+
+    console.log("California Doc: ");
+    //var caliDoc = collection.find({},{title:1});
     collection.find({}).toArray(function(err, result){
       if(err){
-        res.send(err);
+        print(err)
       } else {
-        console.log("Location clicked: ", vidTitle);
-        console.log(result);
+        var allDocs = result;
+        console.log("Vid Title: ", vidTitle);
+        for(var i = 0; i < allDocs.length; i++){
+          if(allDocs[i].title == vidTitle){
+            console.log("matched");
+            var vidURL = allDocs[i].url;
+            res.writeHead(301,
+              {Location: vidURL}
+            );
+            res.end();
+          }
+        }
+
       }
     });
-    // var caliVid = collection.findOne();
-    // console.log("Cali url", caliVid.url);
+
     client.close();
   });
 
