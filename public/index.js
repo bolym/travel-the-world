@@ -43,16 +43,28 @@ function handleVisited() {
   var id = this.getAttribute("id");
   console.log("The coutry visited that was clicked is: ", id);
   var videoLocation = this.getAttribute("title");
-  var videoFile = "CaliforniaVideo.mp4";
 
-  var videoContext = {
-    location: videoLocation,
-    file: videoFile
-  };
+  //request video with that title
 
-  var videoHTML = Handlebars.templates.video(videoContext);
+  var request = new XMLHttpRequest();
+  var url = '/visited/' + videoLocation;
+  request.open('GET', url);
+  var requestBody = videoLocation;
 
-  console.log(videoHTML);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.send(requestBody);
+
+
+  /* The following code was meant to render pages that displayed a video */
+  /* But I've decided to use another website to store those for now */
+  // var videoLocation = this.getAttribute("title");
+  // var videoFile = "CaliforniaVideo.mp4";
+  // var videoContext = {
+  //   location: videoLocation,
+  //   file: videoFile
+  // };
+  // var videoHTML = Handlebars.templates.video(videoContext);
+  // console.log(videoHTML);
 
   //render a page with videoHTML
 
