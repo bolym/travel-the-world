@@ -27,7 +27,7 @@ allCountries.forEach(function(i) {
     i.addEventListener("click", handleNotVisited);
     console.log("we haven't visited here!");
   }
-})
+});
 
 document.getElementById("US").addEventListener("click", openUS);
 
@@ -41,8 +41,8 @@ function handleNotVisited() {
 
 function handleVisited() {
   var id = this.getAttribute("id");
-  console.log("The coutry visited that was clicked is: ", id);
   var videoLocation = this.getAttribute("title");
+  console.log("The coutry visited that was clicked is: ", videoLocation);
 
   //request video with that title
 
@@ -51,8 +51,12 @@ function handleVisited() {
   request.open('GET', url);
   var requestBody = videoLocation;
 
-  request.setRequestHeader('Content-Type', 'application/json');
+  //request.setRequestHeader('Access-Control-Request-Method', 'POST,GET,OPTIONS,PUT,DELETE');
+  //request.setRequestHeader('Access-Control-Request-Headers', 'Content-Type, Accept');
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
   request.send(requestBody);
+  console.log("request for visited sent");
 
 
   /* The following code was meant to render pages that displayed a video */
@@ -68,9 +72,4 @@ function handleVisited() {
 
   //render a page with videoHTML
 
-}
-
-function openCuba() {
-  //window.location.assign("/Cuba.html");
-  alert("Cuba Clicked");
 }

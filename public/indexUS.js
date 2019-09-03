@@ -13,21 +13,25 @@ $(document).mousemove(function(e) {
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
 
-document.getElementById("US-WA").addEventListener("click", openWA);
-document.getElementById("US-OR").addEventListener("click", openOR);
-document.getElementById("US-CA").addEventListener("click", openCA);
 
-function openWA() {
-  //window.location.assign("/WA.html");
-  alert("Washington clicked");
+var visited = ["US-WA", "US-OR", "US-CA"];
+var allStates = Array.from(document.querySelectorAll('path'));
+allStates.forEach(function(i) {
+  if(visited.includes(i.getAttribute("id"))){
+    i.addEventListener("click", handleVisited);
+    console.log("we've visited here!");
+  } else {
+    i.addEventListener("click", handleNotVisited);
+    console.log("we haven't visited here!");
+  }
+});
+
+function handleNotVisited() {
+  alert("We haven't visited here yet, silly Raimy!");
 }
 
-function openOR() {
-  //window.location.assign("/OR.html");
-  alert("Oregon Clicked");
-}
-
-function openCA() {
-  //window.location.assign("/CA.html");
-  alert("California clicked");
+function handleVisited() {
+  var id = this.getAttribute("id");
+  var videoLocation = this.getAttribute("title");
+  console.log("The coutry visited that was clicked is: ", videoLocation);
 }
