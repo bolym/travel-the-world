@@ -13,7 +13,7 @@ $(document).mousemove(function(e) {
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
 
-var visited = ["US", "CA", "CU"];
+var visited = ["US", "CA", "CU", "GB", "IE"];
 var allCountries = Array.from(document.querySelectorAll('path'));
 allCountries.forEach(function(i) {
   if(visited.includes(i.getAttribute("id"))){
@@ -29,7 +29,12 @@ allCountries.forEach(function(i) {
   }
 });
 
-document.getElementById("US").addEventListener("click", openUS);
+document.getElementById("MX").addEventListener("click", handleMexico);
+
+function handleMexico() {
+  window.location.replace("http://flip2.engr.oregonstate.edu:3002/Mexico");
+  console.log("request for visited sent");
+}
 
 function openUS() {
   window.location.assign("/US.html");
@@ -40,22 +45,15 @@ function handleNotVisited() {
 }
 
 function handleVisited() {
+  console.log("Registered on Client Side");
   var id = this.getAttribute("id");
   var videoLocation = this.getAttribute("title");
   console.log("The coutry visited that was clicked is: ", videoLocation);
 
   //request video with that title
-
-  var request = new XMLHttpRequest();
   var url = '/visited/' + videoLocation;
-  request.open('GET', url);
-  var requestBody = videoLocation;
+  window.location.href = "http://flip2.engr.oregonstate.edu:3002" + url;
 
-  //request.setRequestHeader('Access-Control-Request-Method', 'POST,GET,OPTIONS,PUT,DELETE');
-  //request.setRequestHeader('Access-Control-Request-Headers', 'Content-Type, Accept');
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  request.send(requestBody);
   console.log("request for visited sent");
 
 

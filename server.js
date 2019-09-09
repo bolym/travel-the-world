@@ -4,6 +4,9 @@ var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 require('dotenv/config');
+var sleep = require('sleep');
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
 
 var app = express();
 var port = process.env.PORT || 3002;
@@ -18,6 +21,50 @@ var port = process.env.PORT || 3002;
 // var mongoUser = process.env.MONGO_USER;
 // var mongoPassword = process.env.MONGO_PASSWORD;
 // var mongoDBName = process.env.MONGO_DB_NAME
+
+app.get('/Mexico', function(req, res, next){
+  console.log("Signal recieved for Mexico");
+  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
+});
+
+app.get('/visited/:title', function(req, res, next){
+  console.log("Signal recieved for: ", req.params.title);
+
+  // res.writeHead(301,{Location: 'https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4'});
+  // res.end();
+  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
+  // console.log("request for visited recieved on server");
+  //
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
+  // res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  //
+  // var vidTitle = req.params.title;
+  // console.log("Vid Title: ", vidTitle);
+  //
+  // var allDocs = findAll();
+
+  // console.log("finished mongo connection");
+  //
+  // console.log(allDocs.length);
+  //
+  // if(allDocs.length > 0){
+  //   for(var i = 0; i < allDocs.length; i++){
+  //     console.log("Title: ", allDocs[i].title);
+  //     if(allDocs[i].title == vidTitle){
+  //       console.log("matched");
+  //       var vidURL = allDocs[i].url;
+  //       console.log("videoURL: ", vidURL);
+  //
+  //       res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
+  //       console.log("redirected");
+  //     }
+  //   }
+  // } else {
+  //   next();
+  // }
+
+});
 
 app.use(bodyParser.json());
 
@@ -38,60 +85,41 @@ app.get('/', function (req, res, next){
 
 });
 
-
-app.get('/visited/:title', function(req, res, next){
-  console.log("request for visited recieved on server");
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
-  res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization");
-
-  var vidTitle = req.params.title;
-  console.log("Vid Title: ", vidTitle);
-
-  console.log("setting vars for db");
+function findAll(){
   const MongoClient = require('mongodb').MongoClient;
   var Grid = require('gridfs');
   var fs = require('fs');
   const uri = process.env.DB_CONNECTION;
   const client = new MongoClient(uri, { useNewUrlParser: true });
-  console.log("finished setting vars");
   console.log("starting mongo connection");
-  client.connect(err => {
+  var allDocs = [];
+
+   client.connect(err => {
 
     const collection = client.db("videos").collection("video_data");
 
     //var caliDoc = collection.find({},{title:1});
-    collection.find({}).toArray(function(err, result){
+     collection.find({}).toArray(function(err, result){
       if(err){
         console.log(err);
       } else {
-        var allDocs = result;
-        console.log(allDocs.length);
-
-        for(var i = 0; i < allDocs.length; i++){
-          console.log("Title: ", allDocs[i].title);
-          if(allDocs[i].title == vidTitle){
-            console.log("matched");
-            var vidURL = allDocs[i].url;
-            console.log("videoURL: ", vidURL);
-
-            res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
-            console.log("redirected");
-          }
-        }
+        allDocs = result;
+        console.log(allDocs);
       }
     });
-
     client.close();
   });
 
-});
+  console.log("length ", allDocs.length);
+  return allDocs;
+}
+
 
 app.use(express.static('public'));
 
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/404.html'));
+  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
+  //res.sendFile(path.join(__dirname + '/public/404.html'));
 });
 
 
