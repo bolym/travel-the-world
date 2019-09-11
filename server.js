@@ -22,49 +22,6 @@ var port = process.env.PORT || 3002;
 // var mongoPassword = process.env.MONGO_PASSWORD;
 // var mongoDBName = process.env.MONGO_DB_NAME
 
-app.get('/Mexico', function(req, res, next){
-  console.log("Signal recieved for Mexico");
-  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
-});
-
-app.get('/visited/:title', function(req, res, next){
-  console.log("Signal recieved for: ", req.params.title);
-
-  // res.writeHead(301,{Location: 'https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4'});
-  // res.end();
-  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
-  // console.log("request for visited recieved on server");
-  //
-  // res.setHeader('Access-Control-Allow-Origin', '*');
-  // res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
-  // res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  //
-  // var vidTitle = req.params.title;
-  // console.log("Vid Title: ", vidTitle);
-  //
-  // var allDocs = findAll();
-
-  // console.log("finished mongo connection");
-  //
-  // console.log(allDocs.length);
-  //
-  // if(allDocs.length > 0){
-  //   for(var i = 0; i < allDocs.length; i++){
-  //     console.log("Title: ", allDocs[i].title);
-  //     if(allDocs[i].title == vidTitle){
-  //       console.log("matched");
-  //       var vidURL = allDocs[i].url;
-  //       console.log("videoURL: ", vidURL);
-  //
-  //       res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
-  //       console.log("redirected");
-  //     }
-  //   }
-  // } else {
-  //   next();
-  // }
-
-});
 
 app.use(bodyParser.json());
 
@@ -82,6 +39,50 @@ app.get('/', function (req, res, next){
 
   res.status(200);
   res.sendFile(path.join(__dirname + '/public/index.html'));
+
+});
+
+app.get('/visited/:title', function(req, res, next){
+  console.log("Signal recieved for: ", req.params.title);
+
+  var vidTitle = req.params.title;
+
+  const MongoClient = require('mongodb').MongoClient;
+  var Grid = require('gridfs');
+  var fs = require('fs');
+  const uri = process.env.DB_CONNECTION;
+  const client = new MongoClient(uri, { useNewUrlParser: true });
+  console.log("starting mongo connection");
+  var allDocs = [];
+
+   client.connect(err => {
+
+    const collection = client.db("videos").collection("video_data");
+
+    //var caliDoc = collection.find({},{title:1});
+     collection.find({}).toArray(function(err, result){
+      if(err){
+        console.log(err);
+      } else {
+        if(result.length > 0){
+          for(var i = 0; i < result.length; i++){
+            if(result[i].title == vidTitle){
+              var vidURL = result[i].url;
+              console.log("videoURL: ", vidURL);
+
+              return res.redirect(vidURL);
+            }
+          }
+        } else {
+          console.log("No docs available.");
+          next();
+        }
+      }
+    });
+    client.close();
+  });
+
+  console.log("finished mongo connection");
 
 });
 

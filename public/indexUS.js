@@ -34,4 +34,10 @@ function handleVisited() {
   var id = this.getAttribute("id");
   var videoLocation = this.getAttribute("title");
   console.log("The coutry visited that was clicked is: ", videoLocation);
+
+  //request video with that title
+  var url = '/visited/' + videoLocation;
+  window.location.href = window.location.origin + url;
+
+  console.log("request for visited sent");
 }

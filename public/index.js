@@ -29,12 +29,7 @@ allCountries.forEach(function(i) {
   }
 });
 
-document.getElementById("MX").addEventListener("click", handleMexico);
-
-function handleMexico() {
-  window.location.replace("http://flip2.engr.oregonstate.edu:3002/Mexico");
-  console.log("request for visited sent");
-}
+//document.getElementById("MX").addEventListener("click", handleMexico);
 
 function openUS() {
   window.location.assign("/US.html");
@@ -52,7 +47,7 @@ function handleVisited() {
 
   //request video with that title
   var url = '/visited/' + videoLocation;
-  window.location.href = "http://flip2.engr.oregonstate.edu:3002" + url;
+  window.location.href = window.location.origin + url;
 
   console.log("request for visited sent");
 
