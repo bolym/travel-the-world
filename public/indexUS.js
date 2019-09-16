@@ -13,6 +13,10 @@ $(document).mousemove(function(e) {
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
 
+document.getElementById("home").addEventListener("click", function(){
+  window.location.href = window.location.origin;
+  console.log("Went home");
+});
 
 var visited = ["US-WA", "US-OR", "US-CA"];
 var allStates = Array.from(document.querySelectorAll('path'));

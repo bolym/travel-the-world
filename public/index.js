@@ -29,7 +29,10 @@ allCountries.forEach(function(i) {
   }
 });
 
-//document.getElementById("MX").addEventListener("click", handleMexico);
+document.getElementById("home").addEventListener("click", function(){
+  window.location.href = window.location.origin;
+  console.log("Went home");
+});
 
 function openUS() {
   window.location.assign("/US.html");
