@@ -11,16 +11,8 @@ var await = require('asyncawait/await');
 var app = express();
 var port = process.env.PORT || 3002;
 
-// if (!(process.env.MONGO_HOST && process.env.MONGO_USER && process.env.MONGO_PASSWORD && process.env.MONGO_DB_NAME)){
-// 	console.log("#### ERROR FOUND #### - Lacking One Or More Environment Variables!. Quitting.");
-// 	throw noEnvError;
-// }
-
-// var mongoHost = process.env.MONGO_HOST;
-// var mongoPort = process.env.MONGO_PORT || 27017;
-// var mongoUser = process.env.MONGO_USER;
-// var mongoPassword = process.env.MONGO_PASSWORD;
-// var mongoDBName = process.env.MONGO_DB_NAME
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
 
 app.use(bodyParser.json());
@@ -37,15 +29,28 @@ app.use(function(req, res, next) {
 
 app.get('/', function (req, res, next){
 
-  res.status(200);
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+  res.status(200).render('partials/home');
+  //res.sendFile(path.join(__dirname + '/public/index.html'));
 
 });
 
+app.use(express.static('public'));
+
+// app.get('/US.html' , function (req, res, next) {
+//
+// 	res.status(200).render('partials/US');
+//
+// });
+
 app.get('/visited/:title', function(req, res, next){
+
   console.log("Signal recieved for: ", req.params.title);
 
   var vidTitle = req.params.title;
+
+  if(vidTitle == 'style.css'){
+    res.sendFile(path.join(__dirname + '/public/style.css'));
+  }
 
   const MongoClient = require('mongodb').MongoClient;
   var Grid = require('gridfs');
@@ -67,10 +72,16 @@ app.get('/visited/:title', function(req, res, next){
         if(result.length > 0){
           for(var i = 0; i < result.length; i++){
             if(result[i].title == vidTitle){
-              var vidURL = result[i].url;
-              console.log("videoURL: ", vidURL);
-
-              return res.redirect(vidURL);
+              var vidEmbed  = result[i].embed;
+              console.log(vidEmbed);
+              var vidArray = [{location: vidTitle, embed: vidEmbed}];
+              res.status(200).render('partials/videoPage', {
+                videos: vidArray
+              });
+              // var vidURL = result[i].url;
+              // console.log("videoURL: ", vidURL);
+              //
+              // return res.redirect(vidURL);
             }
           }
         } else {
@@ -86,40 +97,9 @@ app.get('/visited/:title', function(req, res, next){
 
 });
 
-function findAll(){
-  const MongoClient = require('mongodb').MongoClient;
-  var Grid = require('gridfs');
-  var fs = require('fs');
-  const uri = process.env.DB_CONNECTION;
-  const client = new MongoClient(uri, { useNewUrlParser: true });
-  console.log("starting mongo connection");
-  var allDocs = [];
-
-   client.connect(err => {
-
-    const collection = client.db("videos").collection("video_data");
-
-    //var caliDoc = collection.find({},{title:1});
-     collection.find({}).toArray(function(err, result){
-      if(err){
-        console.log(err);
-      } else {
-        allDocs = result;
-        console.log(allDocs);
-      }
-    });
-    client.close();
-  });
-
-  console.log("length ", allDocs.length);
-  return allDocs;
-}
-
-
-app.use(express.static('public'));
 
 app.get('*', function (req, res) {
-  res.redirect('https://res.cloudinary.com/travellingcloud/video/upload/v1565408820/CaliforniaVideo.mp4');
+  res.status(404).render('partials/404');
   //res.sendFile(path.join(__dirname + '/public/404.html'));
 });
 
