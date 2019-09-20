@@ -35,6 +35,14 @@ a {
   position: absolute;
 }
 
+.visited path:hover, circle:hover{
+  stroke: blue !important;
+  stroke-width:2px;
+  stroke-linejoin: round;
+  fill: blue !important;
+  cursor: pointer;
+}
+
 path:hover, circle:hover {
   stroke: #0ED001 !important;
   stroke-width:2px;
