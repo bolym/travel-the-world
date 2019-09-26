@@ -123,6 +123,12 @@ a:focus {
   outline: none;
 }
 
+.video {
+  text-align: center;
+  border: none;
+  color: #fff;
+}
+
 .twit-container {
   margin: 50px 10%;
   display: flex;
