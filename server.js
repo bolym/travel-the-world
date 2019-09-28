@@ -78,10 +78,6 @@ app.get('/visited/:title', function(req, res, next){
               res.status(200).render('partials/videoPage', {
                 videos: vidArray
               });
-              // var vidURL = result[i].url;
-              // console.log("videoURL: ", vidURL);
-              //
-              // return res.redirect(vidURL);
             }
           }
         } else {

@@ -204,7 +204,7 @@ a:focus {
   background-color: rgba(0, 0, 0, 0.85);
 }
 
-#create-twit-modal {
+#add-video-modal {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -223,19 +223,27 @@ a:focus {
   max-width: 600px;
   min-width: 350px;
   min-height: 300px;
-  margin: 40px auto;
+  margin: 100px auto;
   background-color: #fff;
   border-radius: 15px;
 }
 
 .modal-header {
   position: relative;
-  padding: 10px 20px;
+  padding: 10px 20px 5px 20px;
 }
 
 .modal-header h3 {
   margin: 0;
+  padding-top: 20px;
   font-size: 28px;
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  padding-top: 10px;
+  text-align: center;
 }
 
 .modal-close-button {

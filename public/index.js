@@ -39,7 +39,8 @@ function openUS() {
 }
 
 function handleNotVisited() {
-  alert("We haven't visited here yet, silly Raimy!");
+  //alert("We haven't visited here yet, silly Raimy!");
+  showCreateTwitModal();
 }
 
 function handleVisited() {
@@ -54,18 +55,66 @@ function handleVisited() {
 
   console.log("request for visited sent");
 
+}
 
-  /* The following code was meant to render pages that displayed a video */
-  /* But I've decided to use another website to store those for now */
-  // var videoLocation = this.getAttribute("title");
-  // var videoFile = "CaliforniaVideo.mp4";
-  // var videoContext = {
-  //   location: videoLocation,
-  //   file: videoFile
-  // };
-  // var videoHTML = Handlebars.templates.video(videoContext);
-  // console.log(videoHTML);
+function handleModalAcceptClick() {
 
-  //render a page with videoHTML
+  var location = document.getElementById('video-location-input').value.trim();
+  var link = document.getElementById('video-link-input').value.trim();
+
+  if (!location || !link) {
+    alert("You must fill in all of the fields!");
+  } else {
+    console.log("location: ", location);
+    console.log("link: ", link);
+    // var request = new XMLHttpRequest();
+    // var url = '/people/' + getPersonIdFromURL() + '/addPhoto';
+    // request.open('POST', url);
+    //
+    // var photo = {
+    //   url: photoURL,
+    //   caption: caption
+    // };
+    // var requestBody = JSON.stringify(photo);
+    // console.log("== requestBody:", requestBody);
+  }
+  hideModal();
+}
+
+function showCreateTwitModal() {
+
+  var modalBackdrop = document.getElementById('modal-backdrop');
+  var createTwitModal = document.getElementById('add-video-modal');
+
+  // Show the modal and its backdrop.
+  modalBackdrop.classList.remove('hidden');
+  createTwitModal.classList.remove('hidden');
 
 }
+
+function hideModal() {
+
+  var modal = document.getElementById('add-video-modal');
+  var modalBackdrop = document.getElementById('modal-backdrop');
+
+  modal.classList.add('hidden');
+  modalBackdrop.classList.add('hidden');
+
+  var location = document.getElementById('video-location-input');
+  var link = document.getElementById('video-link-input');
+
+  location.value = "";
+  link.value = "";
+
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+
+  var modalAcceptButton = document.getElementsByClassName('modal-accept-button');
+  modalAcceptButton[0].addEventListener('click', handleModalAcceptClick);
+
+  var modalCloseButton = document.getElementsByClassName('modal-close-button');
+  var modalCancelButton = document.getElementsByClassName('modal-cancel-button');
+  modalCloseButton[0].addEventListener('click', hideModal);
+  modalCancelButton[0].addEventListener('click', hideModal);
+});
