@@ -42,6 +42,18 @@ app.use(express.static('public'));
 //
 // });
 
+app.post('/addVideo/:location', function(req, res, next){
+
+  console.log("Signal recieved for: ", req.params.location);
+
+  var vidLocation = req.params.location;
+
+  if(vidLocation == 'style.css'){
+    res.sendFile(path.join(__dirname + '/public/style.css'));
+  }
+
+});
+
 app.get('/visited/:title', function(req, res, next){
 
   console.log("Signal recieved for: ", req.params.title);

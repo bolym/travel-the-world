@@ -38,9 +38,11 @@ function openUS() {
   window.location.assign("/US.html");
 }
 
-function handleNotVisited() {
+function handleNotVisited(e) {
   //alert("We haven't visited here yet, silly Raimy!");
-  showCreateTwitModal();
+  //var target = e.target.getAttribute("id");
+  var target = e.currentTarget.getAttribute("title");
+  showCreateTwitModal(target);
 }
 
 function handleVisited() {
@@ -67,21 +69,36 @@ function handleModalAcceptClick() {
   } else {
     console.log("location: ", location);
     console.log("link: ", link);
-    // var request = new XMLHttpRequest();
-    // var url = '/people/' + getPersonIdFromURL() + '/addPhoto';
-    // request.open('POST', url);
-    //
-    // var photo = {
-    //   url: photoURL,
-    //   caption: caption
-    // };
-    // var requestBody = JSON.stringify(photo);
-    // console.log("== requestBody:", requestBody);
+    var request = new XMLHttpRequest();
+    var url = '/addVideo/' + location;
+    request.open('POST', url);
+
+    var video = {
+      location: location,
+      link: link
+    };
+    var requestBody = JSON.stringify(video);
+    console.log("== requestBody:", requestBody);
+
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(requestBody);
+
+    hideModal();
   }
-  hideModal();
+
 }
 
-function showCreateTwitModal() {
+function showCreateTwitModal(targ) {
+
+  var target = targ;
+
+  var targetObj = {
+    location: target
+  };
+
+  var template = document.getElementById('modal-template').innerHTML;
+  var renderTarget = Handlebars.compile(template);
+  document.getElementById('modal-header').innerHTML = renderTarget(targetObj);
 
   var modalBackdrop = document.getElementById('modal-backdrop');
   var createTwitModal = document.getElementById('add-video-modal');

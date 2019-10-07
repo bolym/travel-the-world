@@ -39,8 +39,13 @@
     <div id="add-video-modal" class="hidden">
       <div class="modal-dialog">
 
+        <template id="modal-template">
+          <div class="modal-header">
+            <h3>Visited \{{location}}?</h3>
+          </div>
+        </template>
+
         <div class="modal-header">
-          <h3>Visited somewhere new?</h3>
           <h2>Add a video!</h2>
           <button type="button" class="modal-close-button">&times;</button>
         </div>
