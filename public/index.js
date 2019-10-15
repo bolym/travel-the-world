@@ -13,21 +13,42 @@ $(document).mousemove(function(e) {
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
 
-var visited = ["US", "CA", "CU", "GB", "IE"];
-var allCountries = Array.from(document.querySelectorAll('path'));
-allCountries.forEach(function(i) {
-  if(visited.includes(i.getAttribute("id"))){
-    if(i.getAttribute("id") === "US"){
-      i.addEventListener("click", openUS);
+
+var list = {
+   visited: []
+};
+
+list.visited.push({title: "Canada", tag: "CA"});
+
+var jsonList = JSON.stringify(list);
+
+fs.writeFile('visited.json', jsonList, 'utf8', callback);
+
+fs.readFile('visited.json', 'utf8', function readFileCallback(err, data){
+    if (err){
+        console.log(err);
     } else {
-      i.addEventListener("click", handleVisited);
-    }
-    console.log("we've visited here!");
-  } else {
-    i.addEventListener("click", handleNotVisited);
-    console.log("we haven't visited here!");
-  }
-});
+    list = JSON.parse(data); //now it an object
+    list.visited.push({title: "Cuba", tag: "CU"}); //add some data
+
+    var allCountries = Array.from(document.querySelectorAll('path'));
+    allCountries.forEach(function(i) {
+      if(list.visited.includes(i.getAttribute("id"))){
+        if(i.getAttribute("id") === "US"){
+          i.addEventListener("click", openUS);
+        } else {
+          i.addEventListener("click", handleVisited);
+        }
+        console.log("we've visited here!");
+      } else {
+        i.addEventListener("click", handleNotVisited);
+        console.log("we haven't visited here!");
+      }
+    });
+
+    jsonList = JSON.stringify(list); //convert it back to json
+    fs.writeFile('visited.json', jsonList, 'utf8', callback); // write it back
+}});
 
 document.getElementById("home").addEventListener("click", function(){
   window.location.href = window.location.origin;
@@ -64,8 +85,8 @@ function handleModalAcceptClick() {
   var location = document.getElementById('video-location-input').value.trim();
   var link = document.getElementById('video-link-input').value.trim();
 
-  if (!location || !link) {
-    alert("You must fill in all of the fields!");
+  if (!link) {
+    alert("You must provide an embed link!");
   } else {
     console.log("location: ", location);
     console.log("link: ", link);
@@ -92,13 +113,11 @@ function showCreateTwitModal(targ) {
 
   var target = targ;
 
-  var targetObj = {
-    location: target
-  };
+  var newHeader = "<h3> Just Visited " + target + "? </h3>";
+  console.log("New Header: ", newHeader);
 
-  var template = document.getElementById('modal-template').innerHTML;
-  var renderTarget = Handlebars.compile(template);
-  document.getElementById('modal-header').innerHTML = renderTarget(targetObj);
+  document.getElementById('modal-template').innerHTML = newHeader;
+  document.getElementById('video-location-input').value = target;
 
   var modalBackdrop = document.getElementById('modal-backdrop');
   var createTwitModal = document.getElementById('add-video-modal');

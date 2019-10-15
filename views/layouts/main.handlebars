@@ -39,11 +39,11 @@
     <div id="add-video-modal" class="hidden">
       <div class="modal-dialog">
 
-        <template id="modal-template">
-          <div class="modal-header">
-            <h3>Visited \{{location}}?</h3>
+        <div class="modal-header">
+          <div id="modal-template">
+            <h3>Just Visited?</h3>
           </div>
-        </template>
+        </div>
 
         <div class="modal-header">
           <h2>Add a video!</h2>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="modal-body">
-          <div class="twit-input-element">
+          <div class="hidden">
             <label for="video-location-input">Location</label>
             <input type="text" id="video-location-input">
           </div>

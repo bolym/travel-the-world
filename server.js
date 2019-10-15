@@ -47,10 +47,34 @@ app.post('/addVideo/:location', function(req, res, next){
   console.log("Signal recieved for: ", req.params.location);
 
   var vidLocation = req.params.location;
+  var vidLink = req.body.link;
+  //cannot access link yet through req.body must figure it out
+
+  console.log("vidLink: ", vidLink);
 
   if(vidLocation == 'style.css'){
     res.sendFile(path.join(__dirname + '/public/style.css'));
   }
+
+  const MongoClient = require('mongodb').MongoClient;
+  var Grid = require('gridfs');
+  var fs = require('fs');
+  const uri = process.env.DB_CONNECTION;
+  const client = new MongoClient(uri, { useNewUrlParser: true });
+  console.log("starting mongo connection");
+
+  client.connect(err => {
+
+    const collection = client.db("videos").collection("video_data");
+    collection.insertOne(
+      {
+        title: vidLocation,
+        embed: vidLink
+      }
+    )
+
+    client.close();
+  });
 
 });
 
@@ -84,7 +108,7 @@ app.get('/visited/:title', function(req, res, next){
         if(result.length > 0){
           for(var i = 0; i < result.length; i++){
             if(result[i].title == vidTitle){
-              var vidEmbed  = result[i].embed;
+              var vidEmbed = result[i].embed;
               console.log(vidEmbed);
               var vidArray = [{location: vidTitle, embed: vidEmbed}];
               res.status(200).render('partials/videoPage', {
