@@ -18,10 +18,17 @@ document.getElementById("home").addEventListener("click", function(){
   console.log("Went home");
 });
 
-var visited = ["US-WA", "US-OR", "US-CA"];
+function getCookie(name){
+  // Get name followed by anything except a semicolon
+  var cookiestring=RegExp(""+name+"[^;]+").exec(document.cookie);
+  // Return everything after the equal sign, or an empty string if the cookie name not found
+  return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+}
+
+var visited = getCookie("visited");
 var allStates = Array.from(document.querySelectorAll('path'));
 allStates.forEach(function(i) {
-  if(visited.includes(i.getAttribute("id"))){
+  if(visited.includes(i.getAttribute("title"))){
     i.addEventListener("click", handleVisited);
     console.log("we've visited here!");
   } else {

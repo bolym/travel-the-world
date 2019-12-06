@@ -1,4 +1,3 @@
-
 $("path, circle").hover(function(e) {
   $('#info-box').css('display','block');
   $('#info-box').html($(this).attr('title'));
@@ -13,42 +12,28 @@ $(document).mousemove(function(e) {
   $('#info-box').css('left',e.pageX-($('#info-box').width())/2);
 }).mouseover();
 
+function getCookie(name){
+  // Get name followed by anything except a semicolon
+  var cookiestring=RegExp(""+name+"[^;]+").exec(document.cookie);
+  // Return everything after the equal sign, or an empty string if the cookie name not found
+  return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+}
 
-var list = {
-   visited: []
-};
-
-list.visited.push({title: "Canada", tag: "CA"});
-
-var jsonList = JSON.stringify(list);
-
-fs.writeFile('visited.json', jsonList, 'utf8', callback);
-
-fs.readFile('visited.json', 'utf8', function readFileCallback(err, data){
-    if (err){
-        console.log(err);
-    } else {
-    list = JSON.parse(data); //now it an object
-    list.visited.push({title: "Cuba", tag: "CU"}); //add some data
-
-    var allCountries = Array.from(document.querySelectorAll('path'));
-    allCountries.forEach(function(i) {
-      if(list.visited.includes(i.getAttribute("id"))){
-        if(i.getAttribute("id") === "US"){
-          i.addEventListener("click", openUS);
-        } else {
-          i.addEventListener("click", handleVisited);
-        }
-        console.log("we've visited here!");
-      } else {
-        i.addEventListener("click", handleNotVisited);
-        console.log("we haven't visited here!");
-      }
-    });
-
-    jsonList = JSON.stringify(list); //convert it back to json
-    fs.writeFile('visited.json', jsonList, 'utf8', callback); // write it back
-}});
+var visited = getCookie("visited");
+console.log("visited: ", visited);
+var allCountries = Array.from(document.querySelectorAll('path'));
+allCountries.forEach(function(i) {
+  if(i.getAttribute("id") === "US"){
+    i.addEventListener("click", openUS);
+  }
+  if(visited.includes(i.getAttribute("title"))){
+    i.addEventListener("click", handleVisited);
+    console.log("we've visited here!");
+  } else {
+    i.addEventListener("click", handleNotVisited);
+    console.log("we haven't visited here!");
+  }
+});
 
 document.getElementById("home").addEventListener("click", function(){
   window.location.href = window.location.origin;

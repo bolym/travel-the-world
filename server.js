@@ -7,6 +7,7 @@ require('dotenv/config');
 var sleep = require('sleep');
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
+var cookieParser = require('cookie-parser');
 
 var app = express();
 var port = process.env.PORT || 3002;
@@ -19,6 +20,8 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+app.use(cookieParser());
+
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
@@ -29,8 +32,37 @@ app.use(function(req, res, next) {
 
 app.get('/', function (req, res, next){
 
-  res.status(200).render('partials/home');
-  //res.sendFile(path.join(__dirname + '/public/index.html'));
+  const MongoClient = require('mongodb').MongoClient;
+  var Grid = require('gridfs');
+  var fs = require('fs');
+  const uri = process.env.DB_CONNECTION;
+  const client = new MongoClient(uri, { useNewUrlParser: true });
+  console.log("starting mongo connection");
+  var visited = [];
+
+   client.connect(err => {
+
+    const collection = client.db("videos").collection("video_data");
+
+     collection.find({}).toArray(function(err, result){
+      if(err){
+        console.log(err);
+      } else {
+        if(result.length > 0){
+          for(var i = 0; i < result.length; i++){
+            visited.push(result[i].title);
+          }
+          console.log("visited: ", JSON.stringify(visited));
+          res.cookie("visited", JSON.stringify(visited), { maxAge: 900000, httpOnly: false});
+          res.status(200).render('partials/home');
+        } else {
+          console.log("No docs available.");
+          next();
+        }
+      }
+    });
+    client.close();
+  });
 
 });
 
