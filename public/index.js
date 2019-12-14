@@ -19,21 +19,26 @@ function getCookie(name){
   return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
 }
 
+function setListeners(visited){
+  console.log("visited: ", visited);
+  var allCountries = Array.from(document.querySelectorAll('path'));
+  allCountries.forEach(function(i) {
+    if(visited.includes(i.getAttribute("title"))){
+      i.addEventListener("click", handleVisited);
+      console.log("we've visited here!");
+    } else {
+      if(i.getAttribute("id") === "US"){
+        i.addEventListener("click", openUS);
+      } else {
+        i.addEventListener("click", handleNotVisited);
+        console.log("we haven't visited here!");
+      }
+    }
+  });
+}
+
 var visited = getCookie("visited");
-console.log("visited: ", visited);
-var allCountries = Array.from(document.querySelectorAll('path'));
-allCountries.forEach(function(i) {
-  if(i.getAttribute("id") === "US"){
-    i.addEventListener("click", openUS);
-  }
-  if(visited.includes(i.getAttribute("title"))){
-    i.addEventListener("click", handleVisited);
-    console.log("we've visited here!");
-  } else {
-    i.addEventListener("click", handleNotVisited);
-    console.log("we haven't visited here!");
-  }
-});
+setListeners(visited);
 
 document.getElementById("home").addEventListener("click", function(){
   window.location.href = window.location.origin;
@@ -90,6 +95,11 @@ function handleModalAcceptClick() {
     request.send(requestBody);
 
     hideModal();
+    window.location.assign("/");
+    setTimeout(function(){
+      visited = getCookie("visited");
+      setListeners(visited);
+    }, 20000);
   }
 
 }

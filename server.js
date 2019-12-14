@@ -10,7 +10,7 @@ var await = require('asyncawait/await');
 var cookieParser = require('cookie-parser');
 
 var app = express();
-var port = process.env.PORT || 3002;
+var port = process.env.PORT || 3003;
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -68,11 +68,6 @@ app.get('/', function (req, res, next){
 
 app.use(express.static('public'));
 
-// app.get('/US.html' , function (req, res, next) {
-//
-// 	res.status(200).render('partials/US');
-//
-// });
 
 app.post('/addVideo/:location', function(req, res, next){
 
@@ -107,6 +102,9 @@ app.post('/addVideo/:location', function(req, res, next){
 
     client.close();
   });
+
+  res.status(200).render('partials/home');
+
 
 });
 

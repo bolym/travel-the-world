@@ -25,20 +25,26 @@ function getCookie(name){
   return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
 }
 
-var visited = getCookie("visited");
-var allStates = Array.from(document.querySelectorAll('path'));
-allStates.forEach(function(i) {
-  if(visited.includes(i.getAttribute("title"))){
-    i.addEventListener("click", handleVisited);
-    console.log("we've visited here!");
-  } else {
-    i.addEventListener("click", handleNotVisited);
-    console.log("we haven't visited here!");
-  }
-});
 
-function handleNotVisited() {
-  alert("We haven't visited here yet, silly Raimy!");
+function setListeners(visited){
+  var allStates = Array.from(document.querySelectorAll('path'));
+  allStates.forEach(function(i) {
+    if(visited.includes(i.getAttribute("title"))){
+      i.addEventListener("click", handleVisited);
+      console.log("we've visited here!");
+    } else {
+      i.addEventListener("click", handleNotVisited);
+      console.log("we haven't visited here!");
+    }
+  });
+}
+
+var visited = getCookie("visited");
+setListeners(visited);
+
+function handleNotVisited(e) {
+  var target = e.currentTarget.getAttribute("title");
+  showCreateTwitModal(target);
 }
 
 function handleVisited() {
@@ -52,3 +58,82 @@ function handleVisited() {
 
   console.log("request for visited sent");
 }
+
+function handleModalAcceptClick() {
+
+  var location = document.getElementById('video-location-input').value.trim();
+  var link = document.getElementById('video-link-input').value.trim();
+
+  if (!link) {
+    alert("You must provide an embed link!");
+  } else {
+    console.log("location: ", location);
+    console.log("link: ", link);
+    var request = new XMLHttpRequest();
+    var url = '/addVideo/' + location;
+    request.open('POST', url);
+
+    var video = {
+      location: location,
+      link: link
+    };
+    var requestBody = JSON.stringify(video);
+    console.log("== requestBody:", requestBody);
+
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(requestBody);
+
+    hideModal();
+    window.location.assign("/");
+    setTimeout(function(){
+      visited = getCookie("visited");
+      setListeners(visited);
+    }, 20000);
+  }
+}
+
+function showCreateTwitModal(targ) {
+
+var target = targ;
+
+var newHeader = "<h3> Just Visited " + target + "? </h3>";
+console.log("New Header: ", newHeader);
+
+document.getElementById('modal-template').innerHTML = newHeader;
+document.getElementById('video-location-input').value = target;
+
+var modalBackdrop = document.getElementById('modal-backdrop');
+var createTwitModal = document.getElementById('add-video-modal');
+
+// Show the modal and its backdrop.
+modalBackdrop.classList.remove('hidden');
+createTwitModal.classList.remove('hidden');
+
+}
+
+function hideModal() {
+
+var modal = document.getElementById('add-video-modal');
+var modalBackdrop = document.getElementById('modal-backdrop');
+
+modal.classList.add('hidden');
+modalBackdrop.classList.add('hidden');
+
+var location = document.getElementById('video-location-input');
+var link = document.getElementById('video-link-input');
+
+location.value = "";
+link.value = "";
+
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+
+  var modalAcceptButton = document.getElementsByClassName('modal-accept-button');
+  modalAcceptButton[0].addEventListener('click', handleModalAcceptClick);
+
+  var modalCloseButton = document.getElementsByClassName('modal-close-button');
+  var modalCancelButton = document.getElementsByClassName('modal-cancel-button');
+  modalCloseButton[0].addEventListener('click', hideModal);
+  modalCancelButton[0].addEventListener('click', hideModal);
+});
