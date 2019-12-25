@@ -32,6 +32,7 @@ function setListeners(visited){
     if(visited.includes(i.getAttribute("title"))){
       i.addEventListener("click", handleVisited);
       console.log("we've visited here!");
+      i.classList.add("visited");
     } else {
       i.addEventListener("click", handleNotVisited);
       console.log("we haven't visited here!");

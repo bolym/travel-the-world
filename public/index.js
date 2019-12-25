@@ -25,10 +25,12 @@ function setListeners(visited){
   allCountries.forEach(function(i) {
     if(visited.includes(i.getAttribute("title"))){
       i.addEventListener("click", handleVisited);
+      i.classList.add("visited");
       console.log("we've visited here!");
     } else {
       if(i.getAttribute("id") === "US"){
         i.addEventListener("click", openUS);
+        i.classList.add("visited");
       } else {
         i.addEventListener("click", handleNotVisited);
         console.log("we haven't visited here!");
@@ -99,7 +101,12 @@ function handleModalAcceptClick() {
     setTimeout(function(){
       visited = getCookie("visited");
       setListeners(visited);
-    }, 20000);
+      //var countryAdded = Array.from(document.querySelectorAll('path'));
+      // const loc = location;
+      // const countryAdded = $("p[title|=${loc}]");
+      // console.log("countryAdded: ", countryAdded);
+      // countryAdded.addEventListener("click", handleVisited);
+    }, 100000);
   }
 
 }
